@@ -12,11 +12,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 
+import dj_database_url
 from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+ENVIRONMENT = config("ENVIRONMENT", default="development")
+IN_DEV = ENVIRONMENT == "development"
+IN_PROD = ENVIRONMENT == "production"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -27,8 +31,16 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',
+                 'pastebin-api-nc-b2d037a42bfc.herokuapp.com']
 
+CORS_ALLOWED_ORIGINS = [
+    "https://pastebin-api-nc-b2d037a42bfc.herokuapp.com/",
+]
+
+if IN_DEV:
+    CORS_ALLOWED_ORIGINS.append("https://localhost:8080")
+    CORS_ALLOWED_ORIGINS.append("http://127.0.0.1:8000")
 
 # Application definition
 
@@ -79,21 +91,32 @@ WSGI_APPLICATION = 'PastebinAPI.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.sqlite3',
-    #     'NAME': BASE_DIR / 'db.sqlite3',
-    # }
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": config("DB_NAME"),
-        "USER": config("DB_USER"),
-        "PASSWORD": config("DB_PASS", default=""),
-        "HOST": config("DB_HOST"),
-        'PORT': config("DB_PORT"),
-        "CONN_MAX_AGE": 600,
-    },
-}
+# Database
+"""There are two ways to specifiy the database connection
+
+1. Heroku - we use dj_database_url to interpret Heroku's DATABASE_URL env variable.
+2. Specify DB_NAME, DB_USER, DB_PASS, and DB_HOST Directly in the env file.
+"""
+# Update database configuration with dj_database_url
+heroku_default_db = dj_database_url.config()
+if bool(heroku_default_db):
+    DATABASES = {"default": heroku_default_db}
+else:
+    DATABASES = {
+        # 'default': {
+        #     'ENGINE': 'django.db.backends.sqlite3',
+        #     'NAME': BASE_DIR / 'db.sqlite3',
+        # }
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": config("DB_NAME"),
+            "USER": config("DB_USER"),
+            "PASSWORD": config("DB_PASS", default=""),
+            "HOST": config("DB_HOST"),
+            'PORT': config("DB_PORT"),
+            "CONN_MAX_AGE": 600,
+        },
+    }
 
 
 # Password validation
