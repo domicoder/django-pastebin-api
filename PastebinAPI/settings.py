@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'snippets',
     'drf_yasg',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -179,3 +180,5 @@ STORAGES = {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
 }
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
