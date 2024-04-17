@@ -27,6 +27,11 @@ IN_DEV = ENVIRONMENT == "development"
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config("SECRET_KEY")
 
+# ADMIN
+# ------------------------------------------------------------------------------
+# Django Admin URL.
+ADMIN_URL = "staff/"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", default=False, cast=bool)
 
@@ -66,6 +71,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # To handle all URLs that do not match any defined pattern in Django
+    'snippets.middleware.Handle404Middleware'
 ]
 
 ROOT_URLCONF = 'PastebinAPI.urls'

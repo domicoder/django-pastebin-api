@@ -2,9 +2,10 @@
 # from django.http import Http404
 # from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
+# from rest_framework import mixins, status
+# from django.http import JsonResponse
 # from rest_framework import generics
 from rest_framework import permissions, renderers, viewsets  # , permissions
-# from rest_framework import mixins, status
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -17,6 +18,7 @@ from snippets.serializers import SnippetSerializer, UserSerializer
 # from rest_framework.views import APIView
 
 
+# replaced by 'router = DefaultRouter()'
 @api_view(['GET'])
 def api_root(request, format=None):
     """
