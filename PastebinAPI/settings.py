@@ -20,7 +20,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 ENVIRONMENT = config("ENVIRONMENT", default="development")
 IN_DEV = ENVIRONMENT == "development"
-IN_PROD = ENVIRONMENT == "production"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -29,10 +28,8 @@ IN_PROD = ENVIRONMENT == "production"
 SECRET_KEY = config("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config("DEBUG", default=False, cast=bool)
 
-if IN_PROD:
-    DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',
                  'pastebin-api-nc-b2d037a42bfc.herokuapp.com']
@@ -158,6 +155,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media-files")
 
 MEDIA_URL = "media/"
 STATIC_URL = "static/"
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "dist", "static"),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
