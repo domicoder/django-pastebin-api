@@ -102,15 +102,11 @@ WSGI_APPLICATION = 'PastebinAPI.wsgi.application'
 2. Specify DB_NAME, DB_USER, DB_PASS, and DB_HOST Directly in the env file.
 """
 # Update database configuration with dj_database_url
-heroku_default_db = dj_database_url.config()
+heroku_default_db = dj_database_url.config(conn_max_age=600)
 if bool(heroku_default_db):
     DATABASES = {"default": heroku_default_db}
 else:
     DATABASES = {
-        # 'default': {
-        #     'ENGINE': 'django.db.backends.sqlite3',
-        #     'NAME': BASE_DIR / 'db.sqlite3',
-        # }
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
             "NAME": config("DB_NAME"),

@@ -2,7 +2,7 @@ MIGRATION_NAME ?= ''
 
 
 run:
-	python manage.py runserver
+	python manage.py runserver --noreload
 migrations:
 	python manage.py makemigrations
 migrate:
