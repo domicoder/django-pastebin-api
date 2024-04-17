@@ -31,6 +31,9 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+if IN_PROD:
+    DEBUG = False
+
 ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1',
                  'pastebin-api-nc-b2d037a42bfc.herokuapp.com']
 
